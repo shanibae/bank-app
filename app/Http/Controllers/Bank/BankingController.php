@@ -120,6 +120,10 @@ class BankingController extends Controller
             $transaction = Transaction::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
             $balance = $transaction ? $transaction->balance : 0;
             $transferUser = User::where('email', $request->input('email'))->first();
+
+            if(!$transferUser)
+                return redirect()->route('transfer')->with('invalid', 'Invalid User');
+
             $transferUserTransaction = Transaction::where('user_id', $transferUser->id)->orderBy('created_at', 'desc')->first();
             $transferUserBalance = $transferUserTransaction ? $transferUserTransaction->balance : 0;
 
